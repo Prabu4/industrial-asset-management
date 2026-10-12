@@ -1,0 +1,219 @@
+
+<div class="dashboard">
+  <header class="topbar">
+    <div>
+      <h1>Industrial Asset Management</h1>
+      <p>Monitor your plant assets and maintenance status.</p>
+    </div>
+    <span class="system-status">● System Online</span>
+  </header>
+
+  <section class="summary-grid">
+    <article class="summary-card">
+      <span>Total Assets</span>
+      <strong>{{ totalAssets }}</strong>
+      <small>Across all plant areas</small>
+    </article>
+
+    <article class="summary-card">
+      <span>Operational</span>
+      <strong class="green">{{ operationalCount }}</strong>
+      <small>Assets running normally</small>
+    </article>
+
+    <article class="summary-card">
+      <span>Under Maintenance</span>
+      <strong class="orange">{{ maintenanceCount }}</strong>
+      <small>Maintenance in progress</small>
+    </article>
+
+    <article class="summary-card">
+      <span>Out of Service</span>
+      <strong class="red">{{ outOfServiceCount }}</strong>
+      <small>Require attention</small>
+    </article>
+  </section>
+
+  <section class="asset-section">
+  <div class="section-heading">
+    <div class="section-title">
+      <h2>Plant Assets</h2>
+      <p>Equipment inventory and current status</p>
+    </div>
+
+    <button type="button" (click)="openAssetForm()">
+      + Add Asset
+    </button>
+  </div>
+      
+@if (showAssetForm) {
+  <section class="asset-form-panel">
+  <h3>{{ editingAssetId !== null ? 'Edit Asset' : 'Add New Asset' }}</h3>
+    <p>Enter the equipment details below.</p>
+
+<form #assetForm="ngForm" (ngSubmit)="saveAsset()">
+      <div class="form-grid">
+        <label>
+          Equipment Name *
+          <input
+            type="text"
+            name="equipment"
+            [(ngModel)]="newAsset.equipment"
+            required
+            minlength="2"
+            maxlength="100"
+            placeholder="e.g. Feed Pump P-501"
+          />
+        </label>
+
+        <label>
+          Plant Area *
+          <input
+            type="text"
+            name="area"
+            [(ngModel)]="newAsset.area"
+            required
+            maxlength="100"
+            placeholder="e.g. Process Unit B"
+          />
+        </label>
+
+        <label>
+          Last Maintenance Date *
+          <input
+            type="date"
+            name="lastMaintenance"
+            [(ngModel)]="newAsset.lastMaintenance"
+            required
+          />
+        </label>
+
+        <label>
+          Asset Status *
+          <select
+            name="status"
+            [(ngModel)]="newAsset.status"
+            required
+          >
+            <option value="Operational">Operational</option>
+            <option value="Maintenance">Maintenance</option>
+            <option value="Out of Service">Out of Service</option>
+          </select>
+        </label>
+      </div>
+
+      @if (formError) {
+        <p class="form-error">{{ formError }}</p>
+      }
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          [disabled]="assetForm.invalid || savingAsset"
+        >
+          {{
+            savingAsset
+              ? 'Saving...'
+              : (editingAssetId !== null ? 'Update Asset' : 'Save Asset')
+          }}
+        </button>
+
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="cancelAssetForm()"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </section>
+}
+
+  
+
+    <div class="filters">
+      <input
+        type="search"
+        placeholder="Search asset ID, equipment or area..."
+        [(ngModel)]="searchText"
+        aria-label="Search assets"
+      />
+
+      <select
+        [(ngModel)]="selectedStatus"
+        aria-label="Filter by asset status"
+      >
+        <option value="All">All Statuses</option>
+        <option value="Operational">Operational</option>
+        <option value="Maintenance">Maintenance</option>
+        <option value="Out of Service">Out of Service</option>
+      </select>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Asset ID</th>
+            <th>Equipment</th>
+            <th>Plant Area</th>
+            <th>Last Maintenance</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (asset of filteredAssets; track asset.id) {
+            <tr>
+              <td>{{ asset.id }}</td>
+              <td>{{ asset.equipment }}</td>
+              <td>{{ asset.area }}</td>
+              <td>{{ asset.lastMaintenance }}</td>
+              <td>
+                <span
+                  class="status"
+                  [class.operational]="asset.status === 'Operational'"
+                  [class.maintenance]="asset.status === 'Maintenance'"
+                  [class.offline]="asset.status === 'Out of Service'"
+                >
+                  {{ asset.status }}
+                </span>
+              </td>
+
+            <td class="asset-actions">
+            <button
+              type="button"
+              class="secondary-button"
+              (click)="editAsset(asset)"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              class="delete-button"
+              (click)="deleteAsset(asset)"
+            >
+              Delete
+            </button>
+          </td>  
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="empty-state">
+                No assets match your search or selected status.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p class="demo-note">
+      Showing {{ filteredAssets.length }} of {{ totalAssets }} assets.
+      Demo data only; database integration comes later.
+    </p>
+  </section>
+</div>

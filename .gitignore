@@ -1,0 +1,18 @@
+
+# .NET build files
+**/bin/
+**/obj/
+
+# Angular generated files
+**/node_modules/
+**/dist/
+**/.angular/
+
+# IDE files
+.vs/
+.idea/
+
+# Local environment files
+.env
+.env.*
+**/appsettings.Development.json
