@@ -84,6 +84,20 @@ dotnet test IndustrialAsset.Api.Tests/IndustrialAsset.Api.Tests.csproj
 
 The current development milestone includes 10 passing automated tests covering asset model behavior, CRUD operations, and invalid requests.
 
+## Application Screenshots
+
+### 1. Asset Management Dashboard
+
+![Industrial Asset Management Dashboard](images/Dashboard.png)
+
+### 2. Add or Edit Asset
+
+![Add or Edit Asset Form](images/Add_Edit_Asset.png)
+
+### 3. Swagger API Documentation
+
+![ASP.NET Core Swagger API](images/API Documentation.png)
+
 ## API Endpoints
 
 | Method | Endpoint | Purpose |
