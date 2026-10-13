@@ -34,6 +34,10 @@ industrial-asset-management/
 │   └── UnitTest1.cs
 ├── industrial-asset-ui/
 │   └── src/
+├── images/
+│   └── Dashboard.png
+│   └── Add_Edit_Asset.png
+│   └── API Documentation.png
 └── .gitignore
 ```
 
